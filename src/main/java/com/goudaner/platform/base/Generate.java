@@ -53,14 +53,14 @@ public class Generate {
 
 
     public static void main(String[] args)throws Exception {
-        String basePackage = "com.shen.cloud";
-        String basePath = "/Users/mac/IdeaProjects/shen_cloud_platform/";
-        String entityPath = basePath + "code/src/main/java/com/shen/cloud/entity/";
-        String mapperPath = basePath + "services/src/main/java/com/shen/cloud/mapper/";
-        String servicePath = basePath + "services/src/main/java/com/shen/cloud/service/";
+        String basePackage = "com.goudaner.platform";
+        String basePath = "/Users/ks/IdeaProjects/platform/";
+        String entityPath = basePath + "src/main/java/com/goudaner/platform/entity/";
+        String mapperPath = basePath + "src/main/java/com/goudaner/platform/mapper/";
+        String servicePath = basePath + "src/main/java/com/goudaner/platform/service/";
 //     String basePath = "E:\\workspace\\zmkj-bms-cloud\\";
-        generate("localhost", "3306", "test", "root", "123",
-                "java_deploy","Deploy", basePackage, entityPath, mapperPath, servicePath);
+        generate("localhost", "3306", "goudaner", "root", "sy123456",
+                "dg_wallet","GdWallet", basePackage, entityPath, mapperPath, servicePath);
     }
 
     public static void generateEntity(String host, String port, String database, String username, String password, String tableName, String entityName, String basePackage, String basePath) throws Exception {

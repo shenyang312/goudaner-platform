@@ -1,8 +1,8 @@
 package com.goudaner.platform.stateMachine;
 
 public enum Events {
-    PAY(1,""),        // 支付
-    RECEIVE(2,"");     // 收货
+    PAY(1,"支付"),        // 支付
+    RECEIVE(2,"收货");     // 收货
 
     private Integer code;
     private String msg;

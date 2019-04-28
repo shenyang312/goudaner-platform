@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineConfigurationConfigurer;
@@ -16,10 +17,12 @@ import org.springframework.statemachine.transition.Transition;
 import java.util.EnumSet;
 
 @Configuration
-@EnableStateMachine
+@EnableStateMachine(name="oneStateMachineConfig")
 public class StateMachineConfig extends EnumStateMachineConfigurerAdapter<States, Events> {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
+
+    public static final String orderStateMachineId = "oneStateMachineConfig";
 
     @Override
     public void configure(StateMachineStateConfigurer<States, Events> states)

@@ -15,7 +15,7 @@ public class GenerateService {
         StringBuffer sb = new StringBuffer();
         sb.append("package ").append(servicePackage).append(";\r\n").append("\r\n");
 
-        sb.append("import com.godaner.platform.mapper.MapperUtil;\r\n");
+        sb.append("import com.goudaner.platform.base.SyMapperUtil;\r\n");
         sb.append("import ").append(entityPackage).append(".").append(entityName).append(";\r\n\r\n");
         sb.append("import ").append(mapperPackage).append(".").append(entityName).append("Mapper;\r\n");
         sb.append("import org.springframework.stereotype.Service;\r\n");
@@ -30,7 +30,7 @@ public class GenerateService {
         sb.append("\t\treturn mapper.insertSelective(").append(initial(entityName)).append(");\r\n");
         sb.append("\t}\r\n\r\n");
         sb.append("\tpublic Integer modify").append(entityName).append("(").append(entityName).append(" ").append(initial(entityName)).append(", String... fieldStrs) {\r\n");
-        sb.append("\t\tExample example = MapperUtil.generateExample(").append(initial(entityName)).append(", fieldStrs);\r\n");
+        sb.append("\t\tExample example = SyMapperUtil.generateExample(").append(initial(entityName)).append(", fieldStrs);\r\n");
         sb.append("\t\treturn mapper.updateByExampleSelective(").append(initial(entityName)).append(", example);\r\n");
         sb.append("\t}\r\n\r\n");
         sb.append("\tpublic ").append(entityName).append(" get").append(entityName).append("(").append(entityName).append(" ").append(initial(entityName)).append(") {\r\n");

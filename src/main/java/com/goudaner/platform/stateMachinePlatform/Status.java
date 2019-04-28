@@ -1,0 +1,36 @@
+package com.goudaner.platform.stateMachinePlatform;
+
+import java.util.EnumSet;
+import java.util.Iterator;
+
+public enum Status {
+    PENDING_APPROVAL("status.pending_approval", 1),//等待批准
+    PARTIALLY_APPROVED("status.partially_approval", 2),//部分批准
+    APPROVED("status.approved", 3),//正式批准
+    REJECTED("status.rejected", 4),//拒绝
+    PENGDING_DOCUMENT_CHECK("status.pending_document_check", 5),//等待文件检查
+    PENDING_APPROVAL_CONFIRMATION("status.pending_approval_confirmation", 10),//等待批准
+    PENDING_REJECT_CONFIRMATION("status.pending_reject_confirmation", 11),//等待拒绝确认
+    CHOICE("spring.state.machine.choice",501);//选择
+    private String msgKey;
+    private int statusCode;
+    Status(String desc, int statusCode) {
+        this.msgKey = desc;
+        this.statusCode = statusCode;
+    }
+    public static Status valueOf(int statusCode) {
+       Iterator<Status> iterator = EnumSet.allOf(Status.class).iterator();
+       while (iterator.hasNext()){
+           Status st =iterator.next();
+           if(st.statusCode==statusCode)
+               return st;
+       }
+        throw new IllegalArgumentException("invalid status code");
+    }
+    public String getMsgKey() {
+        return msgKey;
+    }
+    public int getStatusCode() {
+        return statusCode;
+    }
+}
