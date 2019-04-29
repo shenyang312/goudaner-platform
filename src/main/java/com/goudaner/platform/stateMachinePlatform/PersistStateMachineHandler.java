@@ -111,6 +111,12 @@ public class PersistStateMachineHandler extends LifecycleObjectSupport {
         public void preStateChange(State<Status, ActionType> state, Message<ActionType> message, Transition<Status, ActionType> transition, StateMachine<Status, ActionType> stateMachine) {
             listeners.onPersist(state,message,transition,stateMachine);
         }
+        @Override
+        public Exception stateMachineError(StateMachine<Status, ActionType> stateMachine,
+                                           Exception exception) {
+            // return null indicating handled error
+            return exception;
+        }
     }
 
     private class CompositePersistStateChangeListener extends AbstractCompositeListener<PersistStateChangeListener> implements
