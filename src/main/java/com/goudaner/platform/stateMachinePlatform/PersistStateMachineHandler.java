@@ -1,12 +1,17 @@
 package com.goudaner.platform.stateMachinePlatform;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Scope;
 import org.springframework.messaging.Message;
 import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.access.StateMachineAccess;
 import org.springframework.statemachine.access.StateMachineFunction;
+import org.springframework.statemachine.event.OnStateMachineError;
 import org.springframework.statemachine.listener.AbstractCompositeListener;
 import org.springframework.statemachine.state.State;
 import org.springframework.statemachine.support.DefaultStateMachineContext;
@@ -16,15 +21,16 @@ import org.springframework.statemachine.transition.Transition;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 @Component
 public class PersistStateMachineHandler extends LifecycleObjectSupport {
-
-    private final StateMachine<Status,ActionType> stateMachine;
+    private final Logger logger = LoggerFactory.getLogger(getClass());
+    @Resource
+    private StateMachine<Status,ActionType> stateMachine;
     private final PersistingStateChangeInterceptor interceptor = new PersistingStateChangeInterceptor();
     private final CompositePersistStateChangeListener listeners = new CompositePersistStateChangeListener();
 
@@ -33,16 +39,16 @@ public class PersistStateMachineHandler extends LifecycleObjectSupport {
     /**
      * Instantiates a new persist state machine handler.
      *
-     * @param stateMachine the state machine
+//     * @param stateMachine the state machine
      */
-    @Autowired
-    public PersistStateMachineHandler(StateMachine<Status,ActionType> stateMachine) {
-        Assert.notNull(stateMachine, "State machine must be set");
-        this.stateMachine = stateMachine;
-    }
+//    @Autowired
+//    public PersistStateMachineHandler(StateMachine<Status,ActionType> stateMachine) {
+//        Assert.notNull(stateMachine, "State machine must be set");
+//        this.stateMachine = stateMachine;
+//    }
 
     @Override
-    protected void onInit() throws Exception {
+    protected void onInit(){
         stateMachine.getStateMachineAccessor().doWithAllRegions(new StateMachineFunction<StateMachineAccess<Status,ActionType>>() {
             public void apply(StateMachineAccess<Status,ActionType> function) {
                 function.addStateMachineInterceptor(interceptor);
@@ -72,7 +78,16 @@ public class PersistStateMachineHandler extends LifecycleObjectSupport {
             a.resetStateMachine(new DefaultStateMachineContext<Status,ActionType>(state, null, null, null,null,stateMachineSS));
         }
         stateMachine.start();
-        return stateMachine.sendEvent(event);
+
+        try {stateMachine.sendEvent(event);
+            if (stateMachine.getExtendedState().getVariables().containsKey("hasError")){
+                throw (RuntimeException)stateMachine.getExtendedState().getVariables().get("error");
+            }
+            return stateMachine.hasStateMachineError();
+        }catch (RuntimeException e){
+            e.printStackTrace();
+            return true;
+        }
     }
 
     /**
@@ -103,30 +118,30 @@ public class PersistStateMachineHandler extends LifecycleObjectSupport {
          * @param stateMachine the state machine
          */
         void onPersist(State<Status, ActionType> state, Message<ActionType> message, Transition<Status, ActionType> transition,
-                       StateMachine<Status, ActionType> stateMachine);
+                       StateMachine<Status, ActionType> stateMachine) throws Exception;
     }
 
     private class PersistingStateChangeInterceptor extends StateMachineInterceptorAdapter<Status,ActionType> {
         @Override
         public void preStateChange(State<Status, ActionType> state, Message<ActionType> message, Transition<Status, ActionType> transition, StateMachine<Status, ActionType> stateMachine) {
-            listeners.onPersist(state,message,transition,stateMachine);
-        }
-        @Override
-        public Exception stateMachineError(StateMachine<Status, ActionType> stateMachine,
-                                           Exception exception) {
-            // return null indicating handled error
-            return exception;
+                listeners.onPersist(state,message,transition,stateMachine);
         }
     }
 
     private class CompositePersistStateChangeListener extends AbstractCompositeListener<PersistStateChangeListener> implements
             PersistStateChangeListener {
         public void onPersist(State<Status,ActionType> state, Message<ActionType> message,
-                              Transition<Status,ActionType> transition, StateMachine<Status,ActionType> stateMachine) {
+                              Transition<Status,ActionType> transition, StateMachine<Status,ActionType> stateMachine){
             for (Iterator<PersistStateChangeListener> iterator = getListeners().reverse(); iterator.hasNext(); ) {
                 PersistStateChangeListener listener = iterator.next();
-                listener.onPersist(state, message, transition, stateMachine);
+                try {
+                    listener.onPersist(state, message, transition, stateMachine);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    stateMachine.setStateMachineError(e);
+                }
             }
         }
+
     }
 }
