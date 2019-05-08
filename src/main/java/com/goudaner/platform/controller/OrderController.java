@@ -30,7 +30,7 @@ public class OrderController {
     @RequestMapping("/createOrder")
     public String createOrder(GdOrderDto gdOrderDto){
         try {
-            return gdOrderService.orderEvent(gdOrderDto);
+            return gdOrderService.createOrder(gdOrderDto);
         } catch (Exception e) {
             e.printStackTrace();
             logger.debug("程序异常，等会你tm再试");

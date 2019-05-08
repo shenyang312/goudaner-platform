@@ -54,12 +54,13 @@ public class GdOrderService {
 		return retFlag?"出错了，就让你知道知道":gdOrder.getOrderId();
 	}
 
-	public Integer createOrder(GdOrderDto gdOrderDto) {
+	public String createOrder(GdOrderDto gdOrderDto) {
 		logger.info("根据商品id对缓存中库存加锁");
 		logger.info("-库存");
 		logger.info("释放锁");
 		logger.info("生成订单");
-		return mapper.insertSelective(GdOrder.builder().orderId(NoUtil.getOrderNo()).orderAmt(gdOrderDto.getOrderAmt()).build());
+		 mapper.insertSelective(GdOrder.builder().orderId(NoUtil.getOrderNo()).orderAmt(gdOrderDto.getOrderAmt()).build());
+		return "O JB K";
 	}
 
 }
