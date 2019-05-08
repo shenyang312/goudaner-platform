@@ -14,11 +14,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.statemachine.StateMachine;
+import org.springframework.statemachine.config.EnableStateMachine;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
+@EnableStateMachine
 public class PlatformApplication {
 
     //引入Fastjson解析json，不使用默认的jackson

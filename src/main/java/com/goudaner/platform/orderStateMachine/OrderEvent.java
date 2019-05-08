@@ -1,6 +1,7 @@
 package com.goudaner.platform.orderStateMachine;
 
 public enum OrderEvent {
+    CREATE(0,"创建订单"),        // 支付
     PAY(1,"支付"),        // 支付
     DELIVERY(2,"发货"),
     RECEIVE(3,"收货"),
@@ -28,5 +29,15 @@ public enum OrderEvent {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public static String getDesc(Integer value) {
+        OrderEvent[] orderEvents = values();
+        for (OrderEvent orderEventsEnum : orderEvents) {
+            if (orderEventsEnum.getCode().equals(value)) {
+                return orderEventsEnum.getMsg();
+            }
+        }
+        return null;
     }
 }

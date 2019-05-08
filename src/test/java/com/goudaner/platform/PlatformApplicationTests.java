@@ -28,14 +28,14 @@ public class PlatformApplicationTests {
     @Test
     public void contextLoads() {
         StateMachine<OrderStates, OrderEvent> machine = null;
-        try {
-            machine = sSMBuilder.initMachine(beanFactory);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        machine.sendEvent(OrderEvent.PAY);
-        System.out.println("过了一会");
-        machine.sendEvent(OrderEvent.PAY);
+//        try {
+//            machine = sSMBuilder.initMachine(beanFactory);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        machine.sendEvent(OrderEvent.PAY);
+//        System.out.println("过了一会");
+//        machine.sendEvent(OrderEvent.DELIVERY);
         //given
 //        GdAccount account = GdAccount.builder().systemNo("1111").accountNo("22222").accountName("33333").gmtModify(new Date()).build();
 //

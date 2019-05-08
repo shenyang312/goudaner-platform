@@ -30,4 +30,14 @@ public enum OrderStates {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+    public static String getDesc(Integer value) {
+        OrderStates[] orderStates = values();
+        for (OrderStates orderStatesEnum : orderStates) {
+            if (orderStatesEnum.getCode().equals(value)) {
+                return orderStatesEnum.getMsg();
+            }
+        }
+        return null;
+    }
 }
