@@ -78,8 +78,9 @@ public class OrderPersistStateMachineHandler extends LifecycleObjectSupport {
             Boolean errorFlag = stateMachine.hasStateMachineError();
             //判断状态机内部是否发生异常，如果发生为true
             if(errorFlag){
+                stateMachine.setStateMachineError(null);
                 //充值当前beanFactory上下文中的orderStateMachine 的StateMachine
-                this.stateMachine = fSMBuilder.initMachine(beanFactory);
+//                this.stateMachine = fSMBuilder.initMachine(beanFactory);
             }
             return errorFlag;
         }catch (Exception e){
