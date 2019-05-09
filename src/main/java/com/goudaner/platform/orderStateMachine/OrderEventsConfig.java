@@ -16,11 +16,13 @@ import org.springframework.statemachine.StateMachine;
 import org.springframework.statemachine.annotation.EventHeaders;
 import org.springframework.statemachine.annotation.OnTransition;
 import org.springframework.statemachine.annotation.WithStateMachine;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Map;
 
 @WithStateMachine(name = "orderStateMachine")
+@Transactional
 public class OrderEventsConfig {
 
     private Logger logger = LoggerFactory.getLogger(getClass());
