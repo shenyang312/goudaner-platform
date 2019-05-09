@@ -19,11 +19,13 @@ public class GenerateService {
         sb.append("import ").append(entityPackage).append(".").append(entityName).append(";\r\n\r\n");
         sb.append("import ").append(mapperPackage).append(".").append(entityName).append("Mapper;\r\n");
         sb.append("import org.springframework.stereotype.Service;\r\n");
+        sb.append("import org.springframework.transaction.annotation.Transactional;\r\n");
         sb.append("import tk.mybatis.mapper.entity.Example;\r\n\r\n");
         sb.append("import javax.annotation.Resource;\r\n");
         sb.append("import java.util.List;\r\n\r\n");
 
         sb.append("@Service\r\n");
+        sb.append("@Transactional\r\n");
         sb.append("public class ").append(entityName).append("Service {\r\n");
         sb.append("\t@Resource private ").append(entityName).append("Mapper ").append("mapper;\r\n\r\n");
         sb.append("\tpublic Integer add").append(entityName).append("(").append(entityName).append(" ").append(initial(entityName)).append(") {\r\n");

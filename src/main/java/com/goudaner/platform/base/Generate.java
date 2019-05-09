@@ -60,7 +60,7 @@ public class Generate {
         String servicePath = basePath + "src/main/java/com/goudaner/platform/service/";
 //     String basePath = "E:\\workspace\\zmkj-bms-cloud\\";
         generate("localhost", "3306", "goudaner", "root", "sy123456",
-                "dg_goods","GdGoods", basePackage, entityPath, mapperPath, servicePath);
+                "gd_order_merch","GdOrderMerch", basePackage, entityPath, mapperPath, servicePath);
     }
 
     public static void generateEntity(String host, String port, String database, String username, String password, String tableName, String entityName, String basePackage, String basePath) throws Exception {

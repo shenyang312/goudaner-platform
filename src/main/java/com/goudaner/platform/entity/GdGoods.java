@@ -7,9 +7,10 @@ import lombok.*;
 import javax.persistence.Id;
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.math.BigDecimal;
 import java.util.Date;
 
-@Table(schema = "`goudaner`", name = "dg_goods")
+@Table(schema = "`goudaner`", name = "gd_goods")
 @Getter
 @Setter
 @Builder
@@ -25,6 +26,9 @@ public class GdGoods extends SyObject {
 
 	@Column(name = "gds_name")
 	private String gdsName;//商品名称
+
+	@Column(name = "gds_price")
+	private BigDecimal gdsPrice;//商品价格
 
 	@Column(name = "gds_type")
 	private String gdsType;//商品类型

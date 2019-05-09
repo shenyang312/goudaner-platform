@@ -5,6 +5,8 @@ import com.goudaner.platform.entity.GdAccount;
 import com.goudaner.platform.service.GdOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +30,7 @@ public class OrderController {
     }
 
     @RequestMapping("/createOrder")
-    public String createOrder(GdOrderDto gdOrderDto){
+    public String createOrder(@RequestBody GdOrderDto gdOrderDto){
         try {
             return gdOrderService.createOrder(gdOrderDto);
         } catch (Exception e) {
