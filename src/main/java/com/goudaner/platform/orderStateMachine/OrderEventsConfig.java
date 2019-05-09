@@ -46,12 +46,18 @@ public class OrderEventsConfig {
                              StateMachine<String, String> stateMachine,
                              Message<String> message,
                              Exception e) {
-        logger.info("支付成功，待发货，主订单");
-        if (message != null && message.getHeaders().containsKey("gdOrderDto")) {
-            GdOrderDto group = message.getHeaders().get("gdOrderDto", GdOrderDto.class);
+        try {
+            logger.info("支付成功，待发货，主订单");
+            if (message != null && message.getHeaders().containsKey("gdOrderDto")) {
+                GdOrderDto group = message.getHeaders().get("gdOrderDto", GdOrderDto.class);
 //            throw new Exception("自定义异常");
-            gdOrderService.modifyGdOrder(GdOrder.builder().orderId(group.getOrderId()).orderState(OrderStates.WAITING_DELIVERY.getCode()).build(),"orderId");
+                gdOrderService.modifyGdOrder(GdOrder.builder().orderId(group.getOrderId()).orderState(OrderStates.WAITING_DELIVERY.getCode()).build(),"orderId");
+            }
+        }catch (Exception exception){
+            stateMachine.setStateMachineError(exception);
+            exception.printStackTrace();
         }
+
     }
 
     @OnTransition(source = "UNPAID", target = "WAITING_DELIVERY")
@@ -61,9 +67,16 @@ public class OrderEventsConfig {
                              Message<String> message,
                              Exception e) {
         logger.info("支付成功，待发货，订单详情");
-        if (message != null && message.getHeaders().containsKey("gdOrderDto")) {
-            GdOrderDto group = message.getHeaders().get("gdOrderDto", GdOrderDto.class);
-            gdOrderMerchService.modifyGdOrderMerch(GdOrderMerch.builder().orderId(group.getOrderId()).gdsState(OrderStates.WAITING_DELIVERY.getCode()).build(),"orderId");
+        try {
+            if (message != null && message.getHeaders().containsKey("gdOrderDto")) {
+                GdOrderDto group = message.getHeaders().get("gdOrderDto", GdOrderDto.class);
+                gdOrderMerchService.modifyGdOrderMerch(GdOrderMerch.builder().orderId(group.getOrderId()).gdsState(OrderStates.WAITING_DELIVERY.getCode()).build(),"orderId");
+                String a = null;
+                a.equals("");
+            }
+        }catch (Exception exception){
+            stateMachine.setStateMachineError(exception);
+            exception.printStackTrace();
         }
     }
 
