@@ -71,8 +71,6 @@ public class OrderEventsConfig {
             if (message != null && message.getHeaders().containsKey("gdOrderDto")) {
                 GdOrderDto group = message.getHeaders().get("gdOrderDto", GdOrderDto.class);
                 gdOrderMerchService.modifyGdOrderMerch(GdOrderMerch.builder().orderId(group.getOrderId()).gdsState(OrderStates.WAITING_DELIVERY.getCode()).build(),"orderId");
-                String a = null;
-                a.equals("");
             }
         }catch (Exception exception){
             stateMachine.setStateMachineError(exception);
