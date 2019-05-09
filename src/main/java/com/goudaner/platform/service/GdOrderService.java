@@ -67,6 +67,8 @@ public class GdOrderService {
 	}
 
 	public String createOrder(GdOrderDto gdOrderDto)  {
+
+		logger.info("分布式加锁解锁，请借鉴我另一个分布式项目的代码，git地址：https://github.com/shenyang312/shen_cloud_platform");
 		logger.info("根据商品id对缓存中库存加锁");
 		logger.info("-库存");
 		logger.info("释放锁");
