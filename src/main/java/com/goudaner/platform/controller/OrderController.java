@@ -19,7 +19,7 @@ public class OrderController {
     @Resource
     private GdOrderService gdOrderService;
     @RequestMapping("/orderEvent")
-    public String orderEvent(GdOrderDto gdOrderDto){
+    public String orderEvent(@RequestBody GdOrderDto gdOrderDto){
         try {
             return gdOrderService.orderEvent(gdOrderDto);
         } catch (Exception e) {

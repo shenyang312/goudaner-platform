@@ -1,18 +1,20 @@
 package com.goudaner.platform.orderStateMachine;
 
 public enum OrderEvent {
-    CREATE(0,"创建订单"),        // 支付
-    PAY(1,"支付"),        // 支付
-    DELIVERY(2,"发货"),
-    RECEIVE(3,"收货"),
-    NOT_RECEIVE(4,"拒收货");
+    CREATE(0,"CREATE","创建订单"),        // 支付
+    PAY(1,"PAY","支付"),        // 支付
+    DELIVERY(2,"DELIVERY","发货"),
+    RECEIVE(3,"RECEIVE","收货"),
+    NOT_RECEIVE(4,"NOT_RECEIVE","拒收货");
 
     private Integer code;
     private String msg;
+    private String value;
 
-    OrderEvent(Integer code, String msg) {
+    OrderEvent(Integer code, String msg,String value) {
         this.code = code;
         this.msg = msg;
+        this.value = value;
     }
 
     public Integer getCode() {

@@ -1,6 +1,7 @@
 package com.goudaner.platform.service;
 
 import com.goudaner.platform.base.SyMapperUtil;
+import com.goudaner.platform.base.SyUtil;
 import com.goudaner.platform.common.NoUtil;
 import com.goudaner.platform.dto.GdOrderDto;
 import com.goudaner.platform.entity.GdOrder;
@@ -10,6 +11,7 @@ import com.goudaner.platform.mapper.GdOrderMapper;
 import com.goudaner.platform.orderStateMachine.OrderEvent;
 import com.goudaner.platform.orderStateMachine.OrderPersistStateMachineHandler;
 import com.goudaner.platform.orderStateMachine.OrderStates;
+import org.apache.commons.lang.ObjectUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import tk.mybatis.mapper.entity.Example;
 
 import javax.annotation.Resource;
@@ -52,9 +55,13 @@ public class GdOrderService {
 	public String orderEvent(GdOrderDto gdOrderDto) throws Exception {
 		Example example = new Example(GdOrder.class);
 		Example.Criteria criteria = example.createCriteria().andEqualTo("orderId", gdOrderDto.getOrderId());
-		GdOrder gdOrder = mapper.selectByPrimaryKey(criteria);
+		List<GdOrder> gdOrderList = mapper.selectByExample(example);
+		if(SyUtil.isEmpty(gdOrderList)|| gdOrderList.size()>1 )return "没有这个订单";
+		GdOrder gdOrder = gdOrderList.get(0);
 		Boolean retFlag = handler.handleEventWithState(MessageBuilder.withPayload(OrderEvent.valueOf(OrderEvent.getDesc(gdOrderDto.getEventCode())))
-				.setHeader("gdOrderDto", gdOrderDto).build(), OrderStates.valueOf(OrderEvent.getDesc(gdOrder.getOrderState())),"orderStateMachine");
+				.setHeader("gdOrderDto", gdOrderDto).build(), OrderStates.valueOf(OrderStates.getDesc(gdOrder.getOrderState())),"orderStateMachine");
+		//如果内部异常外部回滚，但是现在的情况只有查询，不用回滚
+		if(retFlag) TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 
 		return retFlag?"出错了，就让你知道知道":gdOrder.getOrderId();
 	}

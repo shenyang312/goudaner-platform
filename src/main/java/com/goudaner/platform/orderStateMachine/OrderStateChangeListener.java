@@ -22,7 +22,7 @@ public class OrderStateChangeListener implements OrderPersistStateMachineHandler
         public void onPersist(State<OrderStates, OrderEvent> state, Message<OrderEvent> message, Transition<OrderStates, OrderEvent> transition, StateMachine<OrderStates, OrderEvent> stateMachine) throws Exception {
             if (message != null && message.getHeaders().containsKey("gdOrderDto")) {
                 GdOrderDto group = message.getHeaders().get("gdOrderDto", GdOrderDto.class);
-                System.out.println("end");
+                System.out.println("end-----orderId"+group.getOrderId());
                 logger.info("之后做一个mq发送给消息模块");
 //            throw new Exception("自定义异常");
             }

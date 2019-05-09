@@ -36,9 +36,6 @@ public class GdOrder extends SyObject {
 	@Column(name = "order_state")
 	private Integer orderState;//订单状态：0:待支付，1:待收货，2:结束
 
-	@Column(name = "order_merch_id")
-	private String orderMerchId;//订单商品id
-
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
 	@Column(name = "gmt_modify")
 	private Date gmtModify;//更新时间
